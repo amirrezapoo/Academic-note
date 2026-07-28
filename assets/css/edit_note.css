@@ -1,0 +1,652 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, sans-serif;
+}
+
+body {
+
+    min-height: 100vh;
+
+    background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 45%, #2563EB 100%);
+
+    overflow-x: hidden;
+
+    color: white;
+
+    position: relative;
+
+}
+
+/* ================= Animated Bubble Background ================= */
+
+.bubble-bg {
+
+    position: fixed;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+.bubble-bg span {
+
+    position: absolute;
+
+    bottom: -160px;
+
+    display: block;
+
+    border-radius: 50%;
+
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .35), rgba(255, 255, 255, .05) 60%, transparent 70%);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    animation: riseBubble linear infinite;
+
+}
+
+@keyframes riseBubble {
+
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: .8;
+    }
+
+    90% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateY(-115vh) translateX(var(--drift, 40px)) scale(1.15);
+        opacity: 0;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .bubble-bg span {
+        animation: none;
+        display: none;
+    }
+
+}
+
+/* ================= Shimmer sweep ================= */
+
+.glass-card, .sidebar {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.glass-card::before, .sidebar::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: -150%;
+
+    width: 60%;
+
+    height: 100%;
+
+    background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, .16) 45%, rgba(255, 255, 255, .32) 50%, rgba(255, 255, 255, .16) 55%, transparent 100%);
+
+    transform: skewX(-20deg);
+
+    animation: shimmerSweep 7s ease-in-out infinite;
+
+    pointer-events: none;
+
+    z-index: 2;
+
+}
+
+.sidebar::before {
+
+    animation-delay: 1.2s;
+
+}
+
+.glass-card:nth-of-type(odd)::before {
+
+    animation-delay: 1.4s;
+
+}
+
+@keyframes shimmerSweep {
+
+    0% {
+        left: -150%;
+    }
+
+    35%, 100% {
+        left: 150%;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .glass-card::before, .sidebar::before {
+        animation: none;
+        display: none;
+    }
+
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar {
+
+    position: fixed;
+
+    left: 20px;
+
+    top: 20px;
+
+    width: 270px;
+
+    height: calc(100vh - 40px);
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, .08);
+
+    backdrop-filter: blur(25px);
+
+    -webkit-backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .25);
+
+    padding: 25px;
+
+    transition: .4s;
+
+    z-index: 999;
+
+    color: white;
+
+}
+
+.sidebar .logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 26px;
+
+    font-weight: 800;
+
+    margin-bottom: 35px;
+
+    color: #fff;
+
+    padding: 0;
+
+    animation: floatLogo 4s ease-in-out infinite;
+
+}
+
+@keyframes floatLogo {
+
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+
+}
+
+.sidebar a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px 18px;
+
+    margin-bottom: 10px;
+
+    border-radius: 16px;
+
+    text-decoration: none;
+
+    font-weight: 500;
+
+    color: #E2E8F0;
+
+    transition: .35s;
+
+}
+
+.sidebar a:hover {
+
+    background: rgba(255, 255, 255, .15);
+
+    transform: translateX(8px);
+
+    color: white;
+
+    border-left: none;
+
+}
+
+.sidebar a.active {
+
+    background: linear-gradient(90deg, #3B82F6, #2563EB);
+
+    box-shadow: 0 10px 25px rgba(37, 99, 235, .45);
+
+    color: white;
+
+}
+
+/* ================= Sidebar toggle (mobile) ================= */
+
+.sidebar-toggle {
+
+    position: fixed;
+
+    top: 18px;
+
+    left: 18px;
+
+    z-index: 1001;
+
+    width: 48px;
+
+    height: 48px;
+
+    border: 1px solid rgba(255, 255, 255, .2);
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, .12);
+
+    backdrop-filter: blur(20px);
+
+    -webkit-backdrop-filter: blur(20px);
+
+    color: white;
+
+    font-size: 22px;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.sidebar-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, .5);
+
+    z-index: 998;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .35s;
+
+}
+
+.sidebar-overlay.show {
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+}
+
+/* ================= Content ================= */
+
+.content {
+
+    margin-left: 320px;
+
+    padding: 35px;
+
+    position: relative;
+
+    z-index: 1;
+
+}
+
+/* ================= Glass Card ================= */
+
+.glass-card {
+
+    background: rgba(255, 255, 255, .10);
+
+    backdrop-filter: blur(20px);
+
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    border-radius: 22px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+}
+
+.page-header {
+
+    padding: 25px;
+
+    margin-bottom: 30px;
+
+}
+
+.editor-card {
+
+    padding: 35px;
+
+}
+
+h3, h4 {
+
+    color: #fff;
+
+}
+
+p.text-muted {
+
+    color: #CBD5E1 !important;
+
+}
+
+/* ================= Form controls (dark) ================= */
+
+.form-control, .form-select {
+
+    height: 55px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, .10);
+
+    border: 1px solid rgba(255, 255, 255, .18);
+
+    color: #fff;
+
+}
+
+.form-control::placeholder {
+
+    color: #94A3B8;
+
+}
+
+.form-control:focus, .form-select:focus {
+
+    box-shadow: 0 0 0 .25rem rgba(59, 130, 246, .25);
+
+    border-color: #3B82F6;
+
+    background: rgba(255, 255, 255, .14);
+
+    color: #fff;
+
+}
+
+.form-select option {
+
+    color: #0F172A;
+
+}
+
+.form-label {
+
+    color: #E2E8F0;
+
+    font-weight: 500;
+
+}
+
+textarea {
+
+    height: 340px !important;
+
+    resize: none;
+
+}
+
+/* ================= Toolbar ================= */
+
+.toolbar {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
+
+}
+
+.toolbar button {
+
+    border: none;
+
+    background: rgba(255, 255, 255, .10);
+
+    color: #E2E8F0;
+
+    padding: 10px 14px;
+
+    border-radius: 10px;
+
+    transition: .3s;
+
+}
+
+.toolbar button:hover {
+
+    background: linear-gradient(90deg, #3B82F6, #2563EB);
+
+    color: white;
+
+}
+
+/* ================= Current file cards ================= */
+
+.file-card {
+
+    background: rgba(255, 255, 255, .08) !important;
+
+    border: 1px solid rgba(255, 255, 255, .18) !important;
+
+    border-radius: 16px !important;
+
+}
+
+.file-card strong {
+
+    color: #fff;
+
+}
+
+/* ================= Alert ================= */
+
+.alert-info {
+
+    background: rgba(59, 130, 246, .15);
+
+    border: 1px solid rgba(59, 130, 246, .35);
+
+    color: #DBEAFE;
+
+    border-radius: 16px !important;
+
+}
+
+.alert-info strong {
+
+    color: #fff;
+
+}
+
+/* ================= Stats card ================= */
+
+.stats-card p.text-muted {
+
+    color: #CBD5E1 !important;
+
+}
+
+footer hr {
+
+    border-color: rgba(255, 255, 255, .15);
+
+    opacity: 1;
+
+}
+
+footer p {
+
+    color: #94A3B8;
+
+}
+
+/* ================= Buttons ================= */
+
+.btn-outline-secondary {
+
+    color: #E2E8F0;
+
+    border-color: rgba(255, 255, 255, .3);
+
+}
+
+.btn-outline-secondary:hover {
+
+    background: rgba(255, 255, 255, .12);
+
+    color: #fff;
+
+    border-color: rgba(255, 255, 255, .3);
+
+}
+
+/* ================= Responsive ================= */
+
+@media (max-width: 992px) {
+
+    .sidebar-toggle {
+
+        display: flex;
+
+    }
+
+    .sidebar {
+
+        left: -300px;
+
+        top: 10px;
+
+        height: calc(100vh - 20px);
+
+        width: 260px;
+
+    }
+
+    .sidebar.show {
+
+        left: 10px;
+
+    }
+
+    .content {
+
+        margin-left: 0;
+
+        padding: 90px 18px 30px;
+
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .content {
+
+        padding: 85px 14px 24px;
+
+    }
+
+    .page-header, .editor-card {
+
+        padding: 22px;
+
+    }
+
+    .page-header h3 {
+
+        font-size: 22px;
+
+    }
+
+    .toolbar button {
+
+        padding: 8px 11px;
+
+        font-size: 14px;
+
+    }
+
+    .file-card .card-body {
+
+        flex-direction: column;
+
+        align-items: flex-start !important;
+
+        gap: 12px;
+
+    }
+
+}
+

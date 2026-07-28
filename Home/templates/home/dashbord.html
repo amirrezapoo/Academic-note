@@ -1,0 +1,491 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Academic Notes Organizer</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+</head>
+
+<body>
+
+   {% include 'base.html' %}
+
+    <div class="main">
+
+        <div class="header">
+
+            <div>
+
+                <h2>
+
+                    Welcome Back {{ request.user.username }} 👋
+
+                </h2>
+
+                <p>
+
+                    Manage your courses and notes from one place.
+
+                </p>
+
+            </div>
+
+            <div class="profile">
+
+                <img src="{{ request.user.image.url }}">
+
+                <div>
+
+                    <h6>
+
+                        {{ request.user.username }}
+
+                    </h6>
+
+                    <small>
+
+                        {{ request.user.degree }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row g-4 stats mb-5">
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="glass-card">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-book-fill"></i>
+
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ course }}
+
+                    </div>
+
+                    <div class="stat-title">
+
+                        Courses
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="glass-card">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-journal-text"></i>
+
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ notes }}
+
+                    </div>
+
+                    <div class="stat-title">
+
+                        My Notes
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="glass-card">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-globe2"></i>
+
+                    </div>
+
+                    <div class="stat-value">
+
+                       {{ public }}
+
+                    </div>
+
+                    <div class="stat-title">
+
+                        Public Notes
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="glass-card">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-bookmark-heart-fill"></i>
+
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ bookmark }}
+
+                    </div>
+
+                    <div class="stat-title">
+
+                        Bookmarks
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-lg-4 col-md-6">
+
+                <a href="{% url 'coursesadd' %}" class="action-btn">
+
+                    <i class="bi bi-plus-circle-fill"></i>
+
+                    <span>
+
+                        New Course
+
+                    </span>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+
+                <a href="{% url 'notesadd' %}" class="action-btn">
+
+                    <i class="bi bi-file-earmark-plus-fill"></i>
+
+                    <span>
+
+                        New Note
+
+                    </span>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+
+                <a href="{% url 'public_note' %}" class="action-btn">
+
+                    <i class="bi bi-globe-americas"></i>
+
+                    <span>
+
+                        Explore Notes
+
+                    </span>
+
+                </a>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="row g-4">
+
+
+
+            <div class="col-lg-12">
+
+                <div class="glass-card">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <h4 class="fw-bold">
+
+                            Recent Notes
+
+                        </h4>
+
+                        <a href="{% url 'notes' %}" class="text-white text-decoration-none">
+
+                            View All
+
+                        </a>
+
+                    </div>
+
+                    {% for items in recentnote %}
+                        <div class="list-item">
+
+                        <div class="list-left">
+
+                            <div class="list-icon">
+
+                                📘
+
+                            </div>
+
+                            <div>
+
+                                <div class="list-title">
+
+                                    {{ items.course }}
+
+                                </div>
+
+                                <div class="list-sub">
+
+                                    {{ items.update_at }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <span class="badge bg-success">
+
+                            {{ items.visibility }}
+
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row g-4 mt-4">
+
+            <div class="col-lg-8">
+
+                <div class="glass-card">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <h4 class="fw-bold">
+
+                            Recent Public Notes
+
+                        </h4>
+
+                        <a href="{% url 'public_note' %}" class="text-white text-decoration-none">
+
+                            Explore
+
+                        </a>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-12">
+
+                            {% for items in recentpublic %}
+                                <div class="list-item">
+
+                                <div class="list-left">
+
+                                    <div class="list-icon">
+
+                                        📚
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="list-title">
+
+                                            {{ items.title }}
+
+                                        </div>
+
+                                        <div class="list-sub">
+
+                                            {{ items.user.username }}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="badge bg-primary">
+
+                                        {{ items.likes.count }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                    <footer class="mt-5 mb-4">
+
+                        <div class="glass-card">
+
+                            <div class="row align-items-center">
+
+                                <div class="col-lg-6">
+
+                                    <h5 class="fw-bold mb-2">
+
+                                        Academic Notes Organizer
+
+                                    </h5>
+
+                                    <p class="text-white mb-0">
+
+                                        Organize your academic life with smart notes, public sharing, and modern course
+                                        management.
+
+                                    </p>
+
+                                </div>
+
+                                <div class="col-lg-6 text-lg-end mt-4 mt-lg-0">
+
+                                    <a href="#" class="text-white me-3">
+
+                                        <i class="bi bi-github fs-4"></i>
+
+                                    </a>
+
+                                    <a href="#" class="text-white me-3">
+
+                                        <i class="bi bi-linkedin fs-4"></i>
+
+                                    </a>
+
+                                    <a href="#" class="text-white me-3">
+
+                                        <i class="bi bi-twitter-x fs-4"></i>
+
+                                    </a>
+
+                                    <a href="#" class="text-white">
+
+                                        <i class="bi bi-envelope-fill fs-4"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                            <hr class="my-4 text-secondary">
+
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+                                <p class="mb-0 text-white">
+
+                                    © 2026 Academic Notes Organizer. All Rights Reserved.
+
+                                </p>
+
+                                <div>
+
+                                    <a href="#" class="text-decoration-none text-white me-3">
+
+                                        Privacy Policy
+
+                                    </a>
+
+                                    <a href="#" class="text-decoration-none text-white me-3">
+
+                                        Terms
+
+                                    </a>
+
+                                    <a href="#" class="text-decoration-none text-white">
+
+                                        Support
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </footer>
+
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script src="{% static 'js/dashboard.js' %}">
+                </script>
+
+</body>
+
+</html>

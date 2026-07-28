@@ -1,0 +1,495 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Notes | Academic Notes Organizer</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/notes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+
+</head>
+
+<body>
+{% include 'base.html' %}
+
+<div class="content">
+
+    <div class="header">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <h2 class="fw-bold">
+
+                    My Notes
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Manage, organize and review all of your academic notes.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-5">
+
+                <div class="d-flex gap-2">
+
+                    <input type="text" class="form-control" placeholder="Search your notes...">
+
+                    <a href="note-create.html" class="btn btn-primary">
+
+                        <i class="bi bi-plus-circle me-2"></i>
+
+                        New Note
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <h2 class="fw-bold">
+
+                    {{ allnote.count }}
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Total Notes
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <h2 class="fw-bold text-success">
+
+                    {{ public }}
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Public
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <h2 class="fw-bold text-secondary">
+
+                    {{ private }}
+
+                </h2>
+
+                <p class="text-muted">
+
+                    Private
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <div class="btn-group">
+
+                        <a href="?filter=all&sort={{ sort }}">
+                            <button class="btn btn-primary">
+
+                            All
+
+                        </button>
+                        </a>
+
+                        <a href="?filter=private&sort={{ sort }}">
+                            <button class="btn btn-outline-primary">
+
+                            Private
+
+                        </button>
+                        </a>
+
+                        <a href="?filter=public&sort={{ sort }}">
+                            <button class="btn btn-outline-primary">
+
+                            Public
+
+                        </button>
+                        </a>
+
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <select class="form-select w-auto">
+
+                            <a href="?filter={{ filter }}&sort=newest">
+                                <option>
+
+                                Newest
+
+                            </option>
+                            </a>
+                            <a href="?filter={{ filter }}&sort=oldest">
+
+                            <option>
+
+                                Oldest
+
+                            </option>
+                            </a>
+
+
+
+
+
+                        </select>
+
+                        <button class="btn btn-outline-secondary">
+
+                            <i class="bi bi-grid-3x3-gap-fill"></i>
+
+                        </button>
+
+                        <button class="btn btn-outline-secondary">
+
+                            <i class="bi bi-list-ul"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        {% for note in notes %}
+            <div class="col-lg-4 mb-4">
+
+                <div class="card note-card">
+
+                    <img src="{{ note.image.url }}" class="note-image">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+
+                            {% if note.visibility == 'public' %}
+                                <span class="badge bg-success badge-status">
+
+                                Public
+
+                            </span>
+                            {% else %}
+                                <span class="badge bg-secondary badge-status">
+
+                                private
+
+                            </span>
+
+                            {% endif %}
+
+
+                        </div>
+
+                        <h4 class="fw-bold mt-3">
+
+                            {{ note.title }}
+
+                        </h4>
+
+                        <p class="text-muted">
+
+                            {{ note.context|truncatewords:20 }}
+
+                        </p>
+
+                        <div class="mb-3">
+
+                            <span class="badge bg-primary">
+
+                                {{ note.tags }}
+
+                            </span>
+
+
+                        </div>
+
+                        {% if note.visibility == 'public' %}
+                            <div class="d-flex justify-content-between small text-muted">
+
+                            <span>
+
+                                <i class="bi bi-eye"></i>
+
+                                {{ note.views.count }}
+
+                            </span>
+
+                                <span>
+
+                                <i class="bi bi-heart"></i>
+
+                               {{ note.likes.count }}
+
+                            </span>
+
+                                <span>
+
+                                <i class="bi bi-chat"></i>
+
+                                {{ note.comments.count }}
+
+                            </span>
+
+                                <span>
+
+                                <i class="bi bi-paperclip"></i>
+
+                                {{ note.bookmarks.count }}
+
+                            </span>
+
+                            </div>
+
+                        {% endif %}
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{% url 'ditailnote' note.id %}" class="btn btn-outline-primary">
+
+                                Open
+
+                            </a>
+
+                            <a href="{% url 'editnote' note.id %}" class="btn btn-outline-warning">
+
+                                Edit
+
+                            </a>
+
+                            <a href="{% url 'deletenotes' note.id %}" class="btn btn-outline-danger">
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+    </div>
+
+    <!-- Bulk Actions -->
+
+    <div class="card border-0 shadow-sm rounded-4 mt-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-4">
+
+                    <h5 class="fw-bold mb-0">
+
+                        Bulk Actions
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Apply actions to selected notes.
+
+                    </small>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-5 align-items-center">
+
+
+        <div class="col-lg-6">
+
+            {% if notes.has_other_pages %}
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if notes.has_previous %}
+                            <li class="page-item disabled"><a href="?page=
+                                    {{ notes.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+                                                              class="page-link">Previous</a></li>
+
+                        {% endif %}
+                        {% for i in notes.paginator.page_range %}
+                            {% if i == notes.number %}
+                                <li class="page-item active"><a
+                                        href="?page={{ i }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+                                        class="page-link">{{ i }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a
+                                        href="?page={{ i }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+                                        class="page-link">{{ i }}</a></li>
+
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if notes.has_next %}
+                            <li class="page-item"><a href="?page=
+                                    {{ notes.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+                                                     class="page-link">Next</a></li>
+
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <hr class="my-5">
+
+
+    <footer class="mt-5">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+
+                        <h5 class="fw-bold">
+
+                            Academic Notes Organizer
+
+                        </h5>
+
+                        <p class="text-muted mb-0">
+
+                            Keep your academic notes organized, searchable, and ready to share.
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-6 text-md-end">
+
+                        <a href="#" class="text-decoration-none me-3">
+
+                            Privacy
+
+                        </a>
+
+                        <a href="#" class="text-decoration-none me-3">
+
+                            Support
+
+                        </a>
+
+                        <a href="#" class="text-decoration-none">
+
+                            Contact
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+<script src="{% static 'js/notes.js' %}">
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

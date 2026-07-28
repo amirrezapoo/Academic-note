@@ -1,0 +1,77 @@
+<div class="bubble-bg" id="bubbleBg"></div>
+
+<button class="sidebar-toggle d-lg-none" id="sidebarToggle" aria-label="Toggle menu">
+
+    <i class="bi bi-list"></i>
+
+</button>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="logo">
+
+        <i class="bi bi-journal-richtext"></i>
+
+        Notes
+
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} ">
+
+        <i class="bi bi-speedometer2"></i>
+
+        Dashboard
+
+    </a>
+
+    <a href="{% url 'courses' %}" class="{% if request.resolver_match.url_name == 'courses' %}active{% endif %}">
+
+        <i class="bi bi-book-fill"></i>
+
+        Courses
+
+    </a>
+
+    <a href="{% url 'notes' %}" class="{% if request.resolver_match.url_name == 'notes' %}active{% endif %}">
+
+        <i class="bi bi-journal-text"></i>
+
+        My Notes
+
+    </a>
+
+    <a href="{% url 'public_note' %}" class="{% if request.resolver_match.url_name == "public_note" %}active{% endif %}">
+
+        <i class="bi bi-globe"></i>
+
+        Public Notes
+
+    </a>
+
+    <a href="{% url 'bookmark' %}" class="{% if request.resolver_match.url_name == "bookmark" %}active{% endif %}">
+
+        <i class="bi bi-search"></i>
+
+        Bookmark
+
+    </a>
+
+    <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == "profile" %}active{% endif %}">
+
+        <i class="bi bi-person-circle"></i>
+
+        Profile
+
+    </a>
+
+    <a href="{% url 'logout' %}">
+
+        <i class="bi bi-box-arrow-right"></i>
+
+        Logout
+
+    </a>
+
+</div>
