@@ -61,19 +61,17 @@
 
                 <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
 
-                    <h2 class="fw-bold mb-0">Advanced Programming</h2>
+                    <h2 class="fw-bold mb-0">{{ course.course_name }}</h2>
 
-                    <span class="badge bg-primary">CS401</span>
+                    <span class="badge bg-primary">{{ course.semester }}</span>
 
-                    <span class="badge bg-success">Active</span>
+                    <span class="badge bg-success">{{ course.user.username }}</span>
 
                 </div>
 
                 <p class="text-muted mb-2">
 
-                    Deep dive into object-oriented design, data structures, and advanced
-                    algorithmic problem solving. Covers recursion, generics, memory
-                    management and performance optimization.
+                    {{ course.descriptions }}
 
                 </p>
 
@@ -91,13 +89,13 @@
 
             <div class="col-auto d-flex flex-column gap-2">
 
-                <a href="create-note.html" class="btn btn-primary">
+                <a href="{% url 'notesadd' %}" class="btn btn-primary">
 
                     <i class="bi bi-plus-circle me-2"></i> Add Note
 
                 </a>
 
-                <a href="#" class="btn btn-outline-secondary">
+                <a href="{% url 'editcourses' course.slug %}" class="btn btn-outline-secondary">
 
                     <i class="bi bi-pencil-square me-2"></i> Edit Course
 
@@ -255,9 +253,11 @@
 
     <!-- Notes belonging to this course -->
 
-    <div class="row">
+    {% if note %}
+        <div class="row">
 
-        <div class="col-lg-6 mb-4">
+       {% for items in note %}
+            <div class="col-lg-6 mb-4">
 
             <div class="card glass-card course-note-card">
 
@@ -265,46 +265,47 @@
 
                     <div class="d-flex justify-content-between align-items-start mb-3">
 
-                        <span class="badge bg-success">Public</span>
+                        <span class="badge bg-success">{{ items.visibility }}</span>
 
-                        <span class="text-muted small">2 days ago</span>
+                        <span class="text-muted small">{{ items.created_at }}</span>
 
                     </div>
 
-                    <h5 class="fw-bold">Recursion &amp; Backtracking</h5>
+                    <h5 class="fw-bold">{{ items.title }}</h5>
 
                     <p class="text-muted">
 
-                        Explains recursive problem solving, base cases, and backtracking with
-                        N-Queens and Sudoku examples.
+                        {{ items.context|truncatewords:30 }}
 
                     </p>
 
                     <div class="mb-3">
 
-                        <span class="badge bg-primary tag">Recursion</span>
+                        <span class="badge bg-primary tag">{{ items.tags }}</span>
 
-                        <span class="badge bg-secondary tag">Lecture</span>
 
-                    </div>
-
-                    <div class="d-flex justify-content-between stats mb-3">
-
-                        <span><i class="bi bi-heart-fill text-danger"></i> 62</span>
-
-                        <span><i class="bi bi-chat-dots-fill text-primary"></i> 11</span>
-
-                        <span><i class="bi bi-eye-fill text-success"></i> 540</span>
 
                     </div>
+
+                    {% if items.visibility == "public" %}
+                        <div class="d-flex justify-content-between stats mb-3">
+
+                        <span><i class="bi bi-heart-fill text-danger"></i>{{ items.likes.count }}</span>
+
+                        <span><i class="bi bi-chat-dots-fill text-primary"></i> {{ items.comments.count }}</span>
+
+                        <span><i class="bi bi-eye-fill text-success"></i> {{ items.views.count }}</span>
+
+                    </div>
+                    {% endif %}
 
                     <div class="d-flex gap-2">
 
-                        <a href="note-detail.html" class="btn btn-primary btn-sm">Open</a>
+                        <a href="{% url 'ditailnote' items.id %}" class="btn btn-primary btn-sm">Open</a>
 
-                        <a href="edit-note.html" class="btn btn-outline-secondary btn-sm">Edit</a>
+                        <a href="{% url 'editnote' items.id %}" class="btn btn-outline-secondary btn-sm">Edit</a>
 
-                        <button class="btn btn-outline-danger btn-sm">Delete</button>
+                        <a href="{% url 'deletenotes' items.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
 
                     </div>
 
@@ -314,178 +315,13 @@
 
         </div>
 
-        <div class="col-lg-6 mb-4">
+       {% endfor %}
 
-            <div class="card glass-card course-note-card">
 
-                <div class="card-body">
 
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-
-                        <span class="badge bg-secondary">Private</span>
-
-                        <span class="text-muted small">5 days ago</span>
-
-                    </div>
-
-                    <h5 class="fw-bold">Generics &amp; Templates</h5>
-
-                    <p class="text-muted">
-
-                        Covers generic programming, type parameters, bounded types, and
-                        common pitfalls with wildcards.
-
-                    </p>
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-info tag">Generics</span>
-
-                        <span class="badge bg-dark tag">Exam</span>
-
-                    </div>
-
-                    <div class="d-flex justify-content-between stats mb-3">
-
-                        <span><i class="bi bi-heart-fill text-danger"></i> 18</span>
-
-                        <span><i class="bi bi-chat-dots-fill text-primary"></i> 3</span>
-
-                        <span><i class="bi bi-eye-fill text-success"></i> 210</span>
-
-                    </div>
-
-                    <div class="d-flex gap-2">
-
-                        <a href="note-detail.html" class="btn btn-primary btn-sm">Open</a>
-
-                        <a href="edit-note.html" class="btn btn-outline-secondary btn-sm">Edit</a>
-
-                        <button class="btn btn-outline-danger btn-sm">Delete</button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-6 mb-4">
-
-            <div class="card glass-card course-note-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-
-                        <span class="badge bg-success">Public</span>
-
-                        <span class="text-muted small">1 week ago</span>
-
-                    </div>
-
-                    <h5 class="fw-bold">Memory Management Basics</h5>
-
-                    <p class="text-muted">
-
-                        Stack vs heap, garbage collection strategies, and common memory
-                        leaks in long-running applications.
-
-                    </p>
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-warning text-dark tag">Memory</span>
-
-                        <span class="badge bg-secondary tag">Lecture</span>
-
-                    </div>
-
-                    <div class="d-flex justify-content-between stats mb-3">
-
-                        <span><i class="bi bi-heart-fill text-danger"></i> 44</span>
-
-                        <span><i class="bi bi-chat-dots-fill text-primary"></i> 7</span>
-
-                        <span><i class="bi bi-eye-fill text-success"></i> 380</span>
-
-                    </div>
-
-                    <div class="d-flex gap-2">
-
-                        <a href="note-detail.html" class="btn btn-primary btn-sm">Open</a>
-
-                        <a href="edit-note.html" class="btn btn-outline-secondary btn-sm">Edit</a>
-
-                        <button class="btn btn-outline-danger btn-sm">Delete</button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-6 mb-4">
-
-            <div class="card glass-card course-note-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-
-                        <span class="badge bg-secondary">Private</span>
-
-                        <span class="text-muted small">2 weeks ago</span>
-
-                    </div>
-
-                    <h5 class="fw-bold">Performance Optimization Tips</h5>
-
-                    <p class="text-muted">
-
-                        Profiling techniques, Big-O trade-offs, and practical tips for
-                        speeding up hot code paths.
-
-                    </p>
-
-                    <div class="mb-3">
-
-                        <span class="badge bg-success tag">Performance</span>
-
-                        <span class="badge bg-primary tag">Notes</span>
-
-                    </div>
-
-                    <div class="d-flex justify-content-between stats mb-3">
-
-                        <span><i class="bi bi-heart-fill text-danger"></i> 29</span>
-
-                        <span><i class="bi bi-chat-dots-fill text-primary"></i> 4</span>
-
-                        <span><i class="bi bi-eye-fill text-success"></i> 260</span>
-
-                    </div>
-
-                    <div class="d-flex gap-2">
-
-                        <a href="note-detail.html" class="btn btn-primary btn-sm">Open</a>
-
-                        <a href="edit-note.html" class="btn btn-outline-secondary btn-sm">Edit</a>
-
-                        <button class="btn btn-outline-danger btn-sm">Delete</button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
 
     </div>
+    {% endif %}
 
     <!-- Pagination -->
 
